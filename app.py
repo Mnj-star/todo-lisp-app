@@ -42,12 +42,13 @@ creds = Credentials.from_service_account_info(service_account_info)
 gc = gspread.authorize(creds)
 
 # Now you can access your Google Sheet
-sh = gc.open_by_key("YOUR_SHEET_ID")
+sh = gc.open_by_key("https://docs.google.com/spreadsheets/d/1baiMrjcUoH85UQFYwbPmAVcwKHxFCmj2wd-istlI4Zw/edit?usp=sharing")
 worksheet = sh.sheet1
 
 
 
 #pip install streamlit
 #streamlit run app.py
+
 
 
