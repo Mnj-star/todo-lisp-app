@@ -31,7 +31,23 @@ delete_task = st.selectbox("Select a task to delete:", [""] + st.session_state.t
 if st.button("Delete") and delete_task:
     st.session_state.tasks.remove(delete_task)
 
+import json
+import streamlit as st
+from google.oauth2.service_account import Credentials
+import gspread
+
+# Load the service account JSON string from Streamlit secrets
+service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT"]["JSON"])
+creds = Credentials.from_service_account_info(service_account_info)
+gc = gspread.authorize(creds)
+
+# Now you can access your Google Sheet
+sh = gc.open_by_key("YOUR_SHEET_ID")
+worksheet = sh.sheet1
+
+
 
 #pip install streamlit
 #streamlit run app.py
+
 
