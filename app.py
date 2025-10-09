@@ -89,6 +89,3 @@ st.markdown("---")
 st.caption("Built with Streamlit & Google Sheets integration 🚀")
 
 
-
-#pip install streamlit
-#streamlit run app.py
