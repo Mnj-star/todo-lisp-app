@@ -4,9 +4,7 @@
 # (tasks read-the-bible practice-IT pray-today)
 # (tasks "buy-milk" "finish-homework" "call-Yeshua")
 
-#pip install streamlit
-#streamlit run app.py
-
+# streamlit run app.py
 import streamlit as st
 import gspread
 import json
@@ -92,5 +90,5 @@ st.caption("Built with Streamlit & Google Sheets integration 🚀")
 
 
 
-
-
+#pip install streamlit
+#streamlit run app.py
