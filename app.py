@@ -4,61 +4,33 @@
 # (tasks read-the-bible practice-IT pray-today)
 # (tasks "buy-milk" "finish-homework" "call-Yeshua")
 
-# streamlit run app.py
-# app.py
-
-# app.py
-
-import json
-import gspread
-from google.oauth2.service_account import Credentials
 import streamlit as st
+import yfinance as yf
+import pandas as pd
 
-# -------------------------
-# Google Sheets Setup
-# -------------------------
-# Load service account info from Streamlit secrets
-service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT"]["JSON"])
-creds = Credentials.from_service_account_info(service_account_info)
-gc = gspread.authorize(creds)
+st.title("📝 Lisp-flavored Todo App")
 
-# Your Google Sheet ID
-SHEET_ID = "1baiMrjcUoH85UQFYwbPmAVcwKHxFCmj2wd-istlI4Zw"
-sh = gc.open_by_key(SHEET_ID)
-worksheet = sh.sheet1
+if "tasks" not in st.session_state:
+    st.session_state.tasks = []
 
-# -------------------------
-# Streamlit App
-# -------------------------
-st.set_page_config(page_title="Todo Lisp App", page_icon="✅", layout="centered")
+# Add task
+new_task = st.text_input("Add a task (e.g., buy-milk):")
 
-st.title("✅ Todo Lisp App")
-st.write("Keep track of your daily tasks easily!")
+if st.button("Add") and new_task:
+    st.session_state.tasks.append(new_task)
 
-# -------------------------
-# Task Input
-# -------------------------
-task = st.text_input("Enter a new task:")
+# Show tasks in Lisp-style list
+if st.session_state.tasks:
+    st.write("Your tasks in Lisp style:")
+    st.code(f"(tasks {' '.join(st.session_state.tasks)})", language="lisp")
 
-if st.button("Add Task"):
-    if task.strip() != "":
-        worksheet.append_row([task])
-        st.success(f"Task added: {task}")
-    else:
-        st.error("Please enter a valid task.")
+# Delete tasks
+delete_task = st.selectbox("Select a task to delete:", [""] + st.session_state.tasks)
+if st.button("Delete") and delete_task:
+    st.session_state.tasks.remove(delete_task)
 
-# -------------------------
-# Display Tasks
-# -------------------------
-st.subheader("Your Tasks")
-tasks = worksheet.get_all_values()
-if tasks:
-    for i, t in enumerate(tasks, 1):
-        st.write(f"{i}. {t[0]}")
-else:
-    st.write("No tasks yet!")
 
-# -------------------------
+
 # PayPal Donation Section
 # -------------------------
 st.markdown("---")
@@ -66,4 +38,5 @@ st.header("Support This App 🙏")
 st.write("If you like this app, consider making a small donation:")
 
 paypal_url = "https://www.paypal.com/paypalme/ChildofGod777?country.x=CH/10"
-st.markdown(f"[💖 Donate $1 via PayPal]({paypal_url})", unsafe_allow_html=True)
+st.markdown(f"[💖 Donate $1 via PayPal]({paypal_url})", unsafe_allow_html=True)  
+
