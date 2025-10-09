@@ -54,3 +54,4 @@ st.write(
 )
 paypal_link = "https://www.paypal.com/paypalme/ChildofGod777?country.x=CH"
 st.markdown(f"[Donate $1 via PayPal]({paypal_link})")
+
