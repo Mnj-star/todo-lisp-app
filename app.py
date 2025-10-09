@@ -14,44 +14,56 @@ import gspread
 from google.oauth2.service_account import Credentials
 import streamlit as st
 
-# --- Google Sheets authentication ---
+# -------------------------
+# Google Sheets Setup
+# -------------------------
+# Load service account info from Streamlit secrets
 service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT"]["JSON"])
 creds = Credentials.from_service_account_info(service_account_info)
 gc = gspread.authorize(creds)
 
-# Replace this with your actual Sheet ID (from the URL between /d/ and /edit)
+# Your Google Sheet ID
 SHEET_ID = "1baiMrjcUoH85UQFYwbPmAVcwKHxFCmj2wd-istlI4Zw"
 sh = gc.open_by_key(SHEET_ID)
 worksheet = sh.sheet1
 
-# --- Streamlit UI ---
-st.set_page_config(page_title="Todo App", page_icon="✅")
+# -------------------------
+# Streamlit App
+# -------------------------
+st.set_page_config(page_title="Todo Lisp App", page_icon="✅", layout="centered")
 
-st.title("✅ My Todo App")
-st.write("Keep track of your daily tasks!")
+st.title("✅ Todo Lisp App")
+st.write("Keep track of your daily tasks easily!")
 
-# Display tasks from the first column
-tasks = worksheet.col_values(1)
+# -------------------------
+# Task Input
+# -------------------------
+task = st.text_input("Enter a new task:")
+
+if st.button("Add Task"):
+    if task.strip() != "":
+        worksheet.append_row([task])
+        st.success(f"Task added: {task}")
+    else:
+        st.error("Please enter a valid task.")
+
+# -------------------------
+# Display Tasks
+# -------------------------
+st.subheader("Your Tasks")
+tasks = worksheet.get_all_values()
 if tasks:
-    st.subheader("Your Tasks:")
-    for i, task in enumerate(tasks, 1):
-        st.write(f"{i}. {task}")
+    for i, t in enumerate(tasks, 1):
+        st.write(f"{i}. {t[0]}")
 else:
-    st.write("No tasks yet! Add one below.")
+    st.write("No tasks yet!")
 
-# Input to add a new task
-new_task = st.text_input("Add a new task:")
-if st.button("Add Task") and new_task.strip():
-    worksheet.append_row([new_task])
-    st.success(f"Task '{new_task}' added!")
-    st.experimental_rerun()  # Refresh app to show updated list
-
-# PayPal donation section
+# -------------------------
+# PayPal Donation Section
+# -------------------------
 st.markdown("---")
-st.subheader("Support this app 🙏")
-st.write(
-    "If you like this app, consider donating $1 via PayPal. Your support helps keep it running!"
-)
-paypal_link = "https://www.paypal.com/paypalme/ChildofGod777?country.x=CH"
-st.markdown(f"[Donate $1 via PayPal]({paypal_link})")
+st.header("Support This App 🙏")
+st.write("If you like this app, consider making a small donation:")
 
+paypal_url = "https://www.paypal.com/paypalme/ChildofGod777?country.x=CH/10"
+st.markdown(f"[💖 Donate $1 via PayPal]({paypal_url})", unsafe_allow_html=True)
