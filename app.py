@@ -5,10 +5,15 @@
 # (tasks "buy-milk" "finish-homework" "call-Yeshua")
 
 # streamlit run app.py
-import streamlit as st
-import gspread
 import json
+import gspread
 from google.oauth2.service_account import Credentials
+import streamlit as st
+
+service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT"]["JSON"])
+creds = Credentials.from_service_account_info(service_account_info)
+gc = gspread.authorize(creds)
+
 
 st.set_page_config(page_title="Todo App", page_icon="✅", layout="centered")
 
@@ -87,5 +92,6 @@ if st.button("☕ Support on PayPal"):
 
 st.markdown("---")
 st.caption("Built with Streamlit & Google Sheets integration 🚀")
+
 
 
