@@ -1,4 +1,8 @@
-streamlit
 pandas
 scikit-learn
 yfinance
+streamlit
+gspread
+google-auth
+
+
